@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const fileManager = require('./utils/fileManager');
 const { generateId } = require('./utils/idGenerator');
 const { successResponse, errorResponse } = require('./utils/responseHelper');
@@ -17,6 +18,7 @@ const userController = {
       // Recibir datos
       const {
         tipoIdentificacion,
+        nId,
         nombres,
         apellidos,
         email,
@@ -49,19 +51,32 @@ const userController = {
       // Hashear contraseña
       const hashedPassword = await bcrypt.hash(contraseña, SALT_ROUNDS);
 
+      const rolesPermitidos = ['cliente', 'admin', 'vendedor'];
+      const estadosPermitidos = ['activo', 'inactivo', 'bloqueado'];
+
+      if (rol !== rolesPermitidos) {        
+        return res.status(400).json(errorResponse('Rol no permitido'));
+      }
+
+      if (estado !== estadosPermitidos) {
+        return res.status(400).json(errorResponse('Estado no permitido'));        
+      }
+
       // Crear objeto usuario
       const newUser = {
         id: generateId(),
         tipoIdentificacion: tipoIdentificacion || 'CC',
+        nId: nId,
         nombres: nombres.trim(),
         apellidos: apellidos.trim(),
         fechaNacimiento,
         ciudadDepartamento: ciudadDepartamento || ' ',
         pais: pais || 'Colombia',
+        rol: rolesPermitidos.includes(req.body.rol) ? req.body.rol : 'cliente',
         direccion: direccion || '',
         contraseña: hashedPassword,
         fechaIngreso: new Date().toISOString(),
-        estado: 'activo',
+        estado: estadosPermitidos.includes(req.body.estado) ? req.body.estado : 'activo',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       };
@@ -99,19 +114,28 @@ const userController = {
       }
 
       // Validaciones ./middleware/authUser
-      await auth.findUser (email);
+      const user = await auth.findUser(email);
       await auth.verifyPassword(contraseña, user);
-      await auth.verifyState (user)
+      await auth.verifyState(user);
 
+      // generar token
+      const token = jwt.sign(
+        { id: user.id, rol: user.rol },
+        process.env.SECRET_KEY,
+        { expiresIn: '1h' }
+      );
       // Responder sin contraseña
       const userResponse = { ...user };
       delete userResponse.contraseña;
 
       res.json(
-        successResponse(userResponse, 'Login exitoso')
+        successResponse({ user: userResponse, token }, 'Login exitoso')
       );
 
-    } catch (error) {
+    } catch (err) {
+      const status = err.status || 500;
+      res.status(status).json(errorResponse(err.message));
+
       console.error('Error en login:', error);
       res.status(500).json(
         errorResponse('Error interno en login')
@@ -173,6 +197,38 @@ const userController = {
       console.error('Error cambiando contraseña:', error);
       res.status(500).json(
         errorResponse('Error interno al cambiar contraseña')
+      );
+    }
+  },
+
+  // Obtener todos los usuarios
+  async getUsers(req, res) {
+    try {
+      // Verificar que el usuario autenticado es admin
+      if (req.user.rol !== 'admin') {
+        return res.status(403).json(
+          errorResponse('No tienes permisos para ver la lista de usuarios')
+        );
+      }
+
+      // Leer todos los usuarios
+      const users = await fileManager.readTable('users');
+
+      // Eliminar contraseñas antes de responder
+      const usersResponse = users.map(user => {
+        const safeUser = { ...user };
+        delete safeUser.contraseña;
+        return safeUser;
+      });
+
+      res.json(
+        successResponse(usersResponse, `${usersResponse.length} usuarios encontrados`)
+      );
+
+    } catch (error) {
+      console.error('Error obteniendo usuarios:', error);
+      res.status(500).json(
+        errorResponse('Error interno al obtener usuarios')
       );
     }
   },
@@ -247,7 +303,7 @@ const userController = {
   },
 
   // Actualizar/editar usuario
-  async editUser (req, res) {
+  async updateUser (req, res) {
     try{
       const { id } = req.params;
 
@@ -265,11 +321,23 @@ const userController = {
       }
 
       const user = users[userIndex];
+      
+      const rolesPermitidos = ['cliente', 'admin', 'vendedor'];
+      const estadosPermitidos = ['activo', 'inactivo', 'bloqueado'];
+
+      if (userData.rol !== rolesPermitidos) {        
+        return res.status(400).json(errorResponse('Rol no permitido'));
+      }
+
+      if (userData.estado !== estadosPermitidos) {
+        return res.status(400).json(errorResponse('Estado no permitido'));        
+      }
 
       // Mantener valores anteriores si no se envía un campo
-      const updatedUser = {
+      const updateUser = {
         ...user,
         tipoIdentificacion: userData.tipoIdentificacion || user.tipoIdentificacion,
+        nId: userData.nId || user.nId,
         nombres: userData.nombres || user.nombres,
         apellidos: userData.apellidos || user.apellidos,
         email: userData.email || user.email,
@@ -281,13 +349,13 @@ const userController = {
         updatedAt: new Date().toISOString()
       };
 
-      await fileManager.updateInTable ('users', id, updatedUser)
+      await fileManager.updateInTable ('users', id, updateUser)
 
       // Responder sin contraseña
-      const userResponse = { ...editUser };
+      const userResponse = { ...updateUser };
       delete userResponse.contraseña;
 
-      res.status(201).json(
+      res.status(200).json(
         successResponse(userResponse, 'Usuario actualizado exitosamente')
       );
     } catch (error) {
@@ -325,6 +393,39 @@ const userController = {
       console.error('Error buscando usuarios:', error);
       res.status(500).json(
         errorResponse('Error interno en búsqueda')
+      );
+    }
+  },
+  
+  // Eliminar usuario
+  async deleteUser(req, res) {
+    try{
+      const { id } = req.params;
+      
+      // Buscar usuario
+      const users = await fileManager.readTable('users');
+      const userIndex = users.findIndex(u => u.id === id);
+
+      if (userIndex === -1) {
+        return res.status(404).json(errorResponse('Usuario no encontrado'));
+      }
+
+      await fileManager.removeFromTable ('users', id);
+
+      res.status(204).json(
+        successResponse('Usuario eliminado exitosamente')
+      );
+
+    } catch (error) {
+      if (error.message === 'Registro no encontrado') {
+        return res.status(404).json(
+          errorResponse('Usuario no encontrado')
+        );
+      }
+
+      console.error('Error eliminando usuario:', error);
+      res.status(500).json(
+        errorResponse('Error interno al eliminar usuario')
       );
     }
   }

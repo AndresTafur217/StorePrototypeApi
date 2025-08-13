@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -19,14 +21,10 @@ app.use((req, res, next) => {
 // Importar rutas
 const crudRoutes = require('./routes/crudRoutes');
 const userRoutes = require('./routes/userRoutes');
-// const productRoutes = require('./routes/productRoutes');
-// const authRoutes = require('./routes/authRoutes');
 
 // Usar rutas
-app.use('/api', crudRoutes);           // CRUD genérico: /api/tabla
-app.use('/api/users', userRoutes);     // Rutas específicas: /api/users/login
-// app.use('/api/products', productRoutes);
-// app.use('/api/auth', authRoutes);
+app.use('/api', crudRoutes);
+app.use('/api/users', userRoutes);
 
 // Ruta de salud del servidor
 app.get('/health', (req, res) => {
@@ -58,10 +56,10 @@ app.use('*', (req, res) => {
 
 // Iniciar servidor
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
-  console.log(`📁 Datos guardados en: ${path.join(__dirname, 'data')}`);
-  console.log(`🔗 API disponible en: http://localhost:${PORT}/api`);
-  console.log(`💊 Health check: http://localhost:${PORT}/health`);
+  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`Datos guardados en: ${path.join(__dirname, 'data')}`);
+  console.log(`API disponible en: http://localhost:${PORT}/api`);
+  console.log(`Health check: http://localhost:${PORT}/health`);
 });
 
 module.exports = app;

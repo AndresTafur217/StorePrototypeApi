@@ -9,7 +9,7 @@ const ensureDataDir = async () => {
     await fs.access(DATA_DIR);
   } catch {
     await fs.mkdir(DATA_DIR, { recursive: true });
-    console.log(`📁 Directorio creado: ${DATA_DIR}`);
+    console.log(`Directorio creado: ${DATA_DIR}`);
   }
 };
 
@@ -24,7 +24,7 @@ const fileManager = {
     } catch {
       // Si el archivo no existe, lo agrega
       await fs.writeFile(filePath, JSON.stringify([], null, 2));
-      console.log(`🆕 Tabla creada: ${tableName}.json`);
+      console.log(`Tabla creada: ${tableName}.json`);
     }
   },
 
@@ -150,7 +150,7 @@ const fileManager = {
     
     try {
       await fs.unlink(filePath);
-      console.log(`🗑️ Tabla eliminada: ${tableName}.json`);
+      console.log(`Tabla eliminada: ${tableName}.json`);
       return true;
     } catch (error) {
       console.error(`Error eliminando tabla ${tableName}:`, error);
@@ -165,7 +165,7 @@ const fileManager = {
     const backupName = `${tableName}_backup_${timestamp}`;
     
     await this.writeTable(backupName, data);
-    console.log(`💾 Backup creado: ${backupName}.json`);
+    console.log(`Backup creado: ${backupName}.json`);
     return backupName;
   },
 
@@ -214,7 +214,7 @@ const fileManager = {
       const exists = await this.tableExists(tableName);
       if (!exists) {
         await this.writeTable(tableName, initialData);
-        console.log(`🆕 Tabla inicializada: ${tableName}.json`);
+        console.log(`Tabla inicializada: ${tableName}.json`);
       }
     }
   }
