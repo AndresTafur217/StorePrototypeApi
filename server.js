@@ -24,6 +24,13 @@ const userRoutes = require('./routes/userRoutes');
 const productRoutes= require('./routes/productRoutes');
 const specificationRoutes = require('./routes/specificationRoutes');
 const favoriteRoutes = require('./routes/favoriteRoutes');
+const areaRoutes = require('./routes/areaRoutes');
+const typeRoutes = require('./routes/typeRoutes');
+const reportRoutes = require('./routes/reportRoutes');
+const orderRoutes = require('./routes/orderRoutes');
+const invoiceRoutes = require('./routes/invoiceRoutes');
+const ratingRoutes = require('./routes/ratingRoutes');
+const paymentRoutes = require('./routes/paymentRoutes');
 
 // Usar rutas
 app.use('/api', crudRoutes);
@@ -31,6 +38,13 @@ app.use('/api/users', userRoutes);
 app.use('/api/product', productRoutes);
 app.use('/api/specification', specificationRoutes);
 app.use('/api/favorite', favoriteRoutes);
+app.use('/api/area', areaRoutes);
+app.use('/api/type', typeRoutes);
+app.use('/api/report', reportRoutes);
+app.use('/api/order', orderRoutes);
+app.use('/api/invoice', invoiceRoutes);
+app.use('/api/rating', ratingRoutes);
+app.use('/api/payment', paymentRoutes);
 
 // Ruta de salud del servidor
 app.get('/health', (req, res) => {
