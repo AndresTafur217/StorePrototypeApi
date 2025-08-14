@@ -1,7 +1,8 @@
-const fileManager = require('./utils/fileManager');
-const { generateId } = require('./utils/idGenerator');
-const { successResponse, errorResponse } = require('./utils/responseHelper');
+const fileManager = require('../utils/fileManager');
+const { generateId } = require('../utils/idGenerator');
+const { successResponse, errorResponse } = require('../utils/responseHelper');
 const invoicesController = require('./invoicesController'); // nuevo
+const notificationsController = require('./notificationsController');
 
 const ordersController = {
   async addOrder(req, res) {

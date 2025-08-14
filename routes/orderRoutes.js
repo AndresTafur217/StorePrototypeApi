@@ -1,15 +1,20 @@
 const express = require('express');
 const router = express.Router();
-const ordersController = require('./controllers/ordersController');
-const verifyRole = require('./middleware/verifyRole');
-const authMiddleware = require('./middleware/authMiddleware');
+const ordersController = require('../controllers/ordersController');
 
-router.get('/', ordersController.getOrders);
-router.get('/:id/type', ordersController.getTypesById);
-router.delete('/cancel/:id', ordersController.cancelOrder);
-router.delete('/delete/:id', ordersController.deleteOrder);
-router.get('/filter?', ordersController.filterOrders);
-router.post('/add', ordersController.addOrder);
-router.put('/:id/update', ordersController.updateOrderStatus);
+const validateId = (req, res, next) => {
+  const { id } = req.params;
+  if (id && !/^[a-zA-Z0-9_-]+$/.test(id)) {
+    return res.status(400).json({ error: 'ID inválido' });
+  }
+  next();
+};
+
+router.get('/orders', ordersController.getOrders);
+router.get('/filter-order', ordersController.filterOrders);
+router.post('/add-order', ordersController.addOrder);
+router.put('/:id/update-order', validateId, ordersController.updateOrderStatus);
+router.delete('/:id/cancel', validateId, ordersController.cancelOrder);
+router.delete('/:id/delete-order', validateId, ordersController.deleteOrder);
 
 module.exports = router;

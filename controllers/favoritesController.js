@@ -1,7 +1,8 @@
-const fileManager = require('./utils/fileManager');
-const { generateId } = require('./utils/idGenerator');
-const { successResponse, errorResponse } = require('./utils/responseHelper');
-const auth = require('./middleware/authUser');
+const fileManager = require('../utils/fileManager');
+const { generateId } = require('../utils/idGenerator');
+const { successResponse, errorResponse } = require('../utils/responseHelper');
+const auth = require('../middleware/authUser');
+const notificationsController = require('./notificationsController');
 
 const favoritesController = {
   // Agregar producto favorito

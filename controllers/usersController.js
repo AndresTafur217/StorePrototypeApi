@@ -1,9 +1,10 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const fileManager = require('./utils/fileManager');
-const { generateId } = require('./utils/idGenerator');
-const { successResponse, errorResponse } = require('./utils/responseHelper');
-const auth = require('./middleware/authUser');
+const fileManager = require('../utils/fileManager');
+const { generateId } = require('../utils/idGenerator');
+const { successResponse, errorResponse } = require('../utils/responseHelper');
+const auth = require('../middleware/authUser');
+const notificationsController = require('./notificationsController');
 
 // Configuración para bcrypt
 const SALT_ROUNDS = 10;
@@ -15,7 +16,7 @@ const userController = {
       // Asegurar que existe la tabla users
       await fileManager.ensureTable('users');
       
-      // Recibir datos
+      // Recibir datos - CORREGIDO: agregar rol y estado
       const {
         tipoIdentificacion,
         nId,
@@ -27,12 +28,14 @@ const userController = {
         pais,
         direccion,
         contraseña,
+        rol,        // ✅ Agregado
+        estado      // ✅ Agregado
       } = req.body;
 
-      // Validaciones
+      // Validaciones básicas
       if (!nombres || !apellidos || !email || !contraseña) {
         return res.status(400).json(
-          errorResponse('Todos los campos son obligatorios')
+          errorResponse('Nombres, apellidos, email y contraseña son obligatorios')
         );
       }
 
@@ -48,35 +51,37 @@ const userController = {
         );
       }
 
-      // Hashear contraseña
-      const hashedPassword = await bcrypt.hash(contraseña, SALT_ROUNDS);
-
+      // Validaciones de rol y estado - CORREGIDO
       const rolesPermitidos = ['cliente', 'admin', 'vendedor'];
       const estadosPermitidos = ['activo', 'inactivo', 'bloqueado'];
 
-      if (!rolesPermitidos.includes(rol)) {        
+      if (rol && !rolesPermitidos.includes(rol)) {        
         return res.status(400).json(errorResponse('Rol no permitido'));
       }
 
-      if (!estadosPermitidos.includes(estado)) {
+      if (estado && !estadosPermitidos.includes(estado)) {
         return res.status(400).json(errorResponse('Estado no permitido'));        
       }
 
-      // Crear objeto usuario
+      // Hashear contraseña
+      const hashedPassword = await bcrypt.hash(contraseña, SALT_ROUNDS);
+
+      // Crear objeto usuario - CORREGIDO
       const newUser = {
         id: generateId(),
         tipoIdentificacion: tipoIdentificacion || 'CC',
-        nId: nId,
+        nId: nId || '',
         nombres: nombres.trim(),
         apellidos: apellidos.trim(),
-        fechaNacimiento,
-        ciudadDepartamento: ciudadDepartamento || ' ',
+        email: email.toLowerCase().trim(),  // ✅ Normalizar email
+        fechaNacimiento: fechaNacimiento || '',
+        ciudadDepartamento: ciudadDepartamento || '',
         pais: pais || 'Colombia',
-        rol: rolesPermitidos.includes(req.body.rol) ? req.body.rol : 'cliente',
+        rol: rol || 'cliente',              // ✅ Usar valor por defecto
         direccion: direccion || '',
         contraseña: hashedPassword,
         fechaIngreso: new Date().toISOString(),
-        estado: estadosPermitidos.includes(req.body.estado) ? req.body.estado : 'activo',
+        estado: estado || 'activo',         // ✅ Usar valor por defecto
         valoracionPromedio: 0,
         totalValoraciones: 0,
         createdAt: new Date().toISOString(),
@@ -92,13 +97,19 @@ const userController = {
       const userResponse = { ...newUser };
       delete userResponse.contraseña;
 
-      await notificationsController.createNotification({
-        body: {
-          usuarioId: newUser.id,
-          mensaje: '¡Bienvenido! Tu registro ha sido exitoso.',
-          tipo: 'success'
-        }
-      }, { status: () => ({ json: () => {} }) });
+      // Crear notificación (con manejo de errores)
+      try {
+        await notificationsController.createNotification({
+          body: {
+            usuarioId: newUser.id,
+            mensaje: '¡Bienvenido! Tu registro ha sido exitoso.',
+            tipo: 'success'
+          }
+        }, { status: () => ({ json: () => {} }) });
+      } catch (notifError) {
+        console.error('Error creando notificación:', notifError);
+        // No fallar el registro si falla la notificación
+      }
 
       res.status(201).json(
         successResponse(userResponse, 'Usuario agregado exitosamente')
@@ -112,7 +123,7 @@ const userController = {
     }
   },
 
-  // Login de usuario
+  // Login de usuario - CORREGIDO
   async login(req, res) {
     try {
       const { email, contraseña } = req.body;
@@ -123,17 +134,18 @@ const userController = {
         );
       }
 
-      // Validaciones ./middleware/authUser
+      // Validaciones usando middleware authUser
       const user = await auth.findUser(email);
       await auth.verifyPassword(contraseña, user);
       await auth.verifyState(user);
 
-      // generar token
+      // Generar token
       const token = jwt.sign(
-        { id: user.id, rol: user.rol },
-        process.env.SECRET_KEY,
+        { id: user.id, rol: user.rol, email: user.email },
+        process.env.SECRET_KEY || 'fallback-secret-key',
         { expiresIn: '1h' }
       );
+
       // Responder sin contraseña
       const userResponse = { ...user };
       delete userResponse.contraseña;
@@ -143,13 +155,10 @@ const userController = {
       );
 
     } catch (err) {
-      const status = err.status || 500;
-      res.status(status).json(errorResponse(err.message));
-
       console.error('Error en login:', err);
-      res.status(500).json(
-        errorResponse('Error interno en login')
-      );
+      const status = err.status || 500;
+      const message = err.message || 'Error interno en login';
+      res.status(status).json(errorResponse(message));
     }
   },
 
@@ -295,23 +304,21 @@ const userController = {
         updatedAt: new Date().toISOString()
       };
 
-      if (newStatus == 'inactivo') {
+      // Crear notificaciones (con manejo de errores)
+      try {
+        const mensaje = newStatus === 'inactivo' 
+          ? 'Nos entristece que te vayas, esperamos que vuelvas pronto.'
+          : '¡Bienvenido de vuelta! nos alegra que vuelvas y nos acompañes.';
+
         await notificationsController.createNotification({
           body: {
             usuarioId: users[userIndex].id,
-            mensaje: 'Nos entristese que te vallas, esperamos que vuelvas pronto.',
-            tipo: 'success'
-          }
-        }, { status: () => ({ json: () => {} }) });        
-      }
-      if (newStatus == 'activo') {
-        await notificationsController.createNotification({
-          body: {
-            usuarioId: users[userIndex].id,
-            mensaje: '¡Bienvenido de vuelta! nos alegra que vuelvas y nos acompañes.',
+            mensaje,
             tipo: 'success'
           }
         }, { status: () => ({ json: () => {} }) });
+      } catch (notifError) {
+        console.error('Error creando notificación:', notifError);
       }
 
       await fileManager.writeTable('users', users);
@@ -331,12 +338,10 @@ const userController = {
     }
   },
 
-  // Actualizar/editar usuario
-  async updateUser (req, res) {
-    try{
+  // Actualizar/editar usuario - CORREGIDO
+  async updateUser(req, res) {
+    try {
       const { id } = req.params;
-
-      // Recibir los datos
       const userData = req.body;
       
       // Buscar usuario
@@ -354,11 +359,12 @@ const userController = {
       const rolesPermitidos = ['cliente', 'admin', 'vendedor'];
       const estadosPermitidos = ['activo', 'inactivo', 'bloqueado'];
 
-      if (userData.rol !== rolesPermitidos) {        
+      // CORREGIDO: Validaciones correctas
+      if (userData.rol && !rolesPermitidos.includes(userData.rol)) {        
         return res.status(400).json(errorResponse('Rol no permitido'));
       }
 
-      if (userData.estado !== estadosPermitidos) {
+      if (userData.estado && !estadosPermitidos.includes(userData.estado)) {
         return res.status(400).json(errorResponse('Estado no permitido'));        
       }
 
@@ -374,11 +380,12 @@ const userController = {
         ciudadDepartamento: userData.ciudadDepartamento || user.ciudadDepartamento,
         pais: userData.pais || user.pais,
         direccion: userData.direccion || user.direccion,
+        rol: userData.rol || user.rol,
         estado: userData.estado || user.estado,
         updatedAt: new Date().toISOString()
       };
 
-      await fileManager.updateInTable ('users', id, updateUser)
+      await fileManager.updateInTable('users', id, updateUser);
 
       // Responder sin contraseña
       const userResponse = { ...updateUser };
@@ -404,7 +411,7 @@ const userController = {
       const filteredUsers = users.filter(user => 
         user.nombres.toLowerCase().includes(term.toLowerCase()) ||
         user.apellidos.toLowerCase().includes(term.toLowerCase()) ||
-        user.ciudadDepartamento.toLowerCase().includes(term.toLowerCase())
+        (user.ciudadDepartamento && user.ciudadDepartamento.toLowerCase().includes(term.toLowerCase()))
       );
 
       // Responder sin contraseñas
@@ -428,7 +435,7 @@ const userController = {
   
   // Eliminar usuario
   async deleteUser(req, res) {
-    try{
+    try {
       const { id } = req.params;
       
       // Buscar usuario
@@ -439,7 +446,7 @@ const userController = {
         return res.status(404).json(errorResponse('Usuario no encontrado'));
       }
 
-      await fileManager.removeFromTable ('users', id);
+      await fileManager.removeFromTable('users', id);
 
       res.status(204).json(
         successResponse('Usuario eliminado exitosamente')

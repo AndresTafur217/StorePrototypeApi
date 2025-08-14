@@ -5,7 +5,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "dev" : "nodemon server.js"
+    "dev": "nodemon server.js"
   },
   "keywords": [],
   "author": "",
@@ -13,9 +13,16 @@
   "type": "commonjs",
   "description": "API REST para StorePrototype",
   "dependencies": {
-    "body-parser": "^2.2.0",
+    "@paypal/checkout-server-sdk": "^1.0.3",
+    "axios": "^1.7.7",
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.3",
     "cors": "^2.8.5",
-    "express": "^5.1.0"
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "path-to-regexp": "^6.2.1",
+    "stripe": "^18.4.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"

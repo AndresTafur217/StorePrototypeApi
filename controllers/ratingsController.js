@@ -1,6 +1,7 @@
-const fileManager = require('./utils/fileManager');
-const { generateId } = require('./utils/idGenerator');
-const { successResponse, errorResponse } = require('./utils/responseHelper');
+const fileManager = require('../utils/fileManager');
+const { generateId } = require('../utils/idGenerator');
+const { successResponse, errorResponse } = require('../utils/responseHelper');
+const notificationsController = require('./notificationsController');
 
 const ratingsController = {
   // Crear valoración

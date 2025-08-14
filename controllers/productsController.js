@@ -1,6 +1,7 @@
-const fileManager = require('./utils/fileManager');
-const { generateId } = require('./utils/idGenerator');
-const { successResponse, errorResponse } = require('./utils/responseHelper');
+const fileManager = require('../utils/fileManager');
+const { generateId } = require('../utils/idGenerator');
+const { successResponse, errorResponse } = require('../utils/responseHelper');
+const notificationsController = require('./notificationsController');
 
 function calcularEstado(stock) {
   if (stock === 0) return 'agotado';

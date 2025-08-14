@@ -1,0 +1,37 @@
+[
+    {
+      "id": "area_001_comp_2024",
+      "nombre": "Computadores y Laptops",
+      "descripcion": "Sección dedicada a equipos de cómputo, incluyendo computadores de escritorio, laptops, workstations y equipos para gaming. Incluye marcas como Dell, HP, Lenovo, ASUS, MSI y Apple.",
+      "createdAt": "2024-01-10T08:00:00.000Z",
+      "updatedAt": "2024-01-10T08:00:00.000Z"
+    },
+    {
+      "id": "area_002_movil_2024",
+      "nombre": "Dispositivos Móviles",
+      "descripcion": "Área especializada en smartphones, tablets y accesorios móviles. Incluye las últimas tecnologías en dispositivos Android, iOS, fundas, protectores y cargadores inalámbricos.",
+      "createdAt": "2024-01-10T08:15:00.000Z",
+      "updatedAt": "2024-01-10T08:15:00.000Z"
+    },
+    {
+      "id": "area_003_gaming_2024",
+      "nombre": "Gaming y Entretenimiento",
+      "descripcion": "Zona dedicada a videojuegos y entretenimiento digital. Consolas PlayStation, Xbox, Nintendo Switch, juegos, controles, headsets gaming, sillas gamer y streaming equipment.",
+      "createdAt": "2024-01-10T08:30:00.000Z",
+      "updatedAt": "2024-08-05T14:20:00.000Z"
+    },
+    {
+      "id": "area_004_acc_2024",
+      "nombre": "Accesorios y Periféricos",
+      "descripcion": "Amplia variedad de accesorios tecnológicos: teclados, mouse, monitores, webcams, altavoces, auriculares, cables, adaptadores, hubs USB y soluciones de conectividad.",
+      "createdAt": "2024-01-10T08:45:00.000Z",
+      "updatedAt": "2024-07-15T11:30:00.000Z"
+    },
+    {
+      "id": "area_005_smart_2024",
+      "nombre": "Smart Home y IoT",
+      "descripcion": "Productos para el hogar inteligente: asistentes de voz, dispositivos IoT, cámaras de seguridad, termostatos inteligentes, luces LED smart, cerraduras digitales y sistemas de automatización.",
+      "createdAt": "2024-02-01T09:00:00.000Z",
+      "updatedAt": "2024-08-10T16:45:00.000Z"
+    }
+  ]

@@ -1,5 +1,6 @@
-const fileManager = require('./utils/fileManager');
-const { successResponse, errorResponse } = require('./utils/responseHelper');
+const fileManager = require('../utils/fileManager');
+const { successResponse, errorResponse } = require('../utils/responseHelper');
+const notificationsController = require('./notificationsController');
 
 const reportsController = {
   async getSalesReport(req, res) {

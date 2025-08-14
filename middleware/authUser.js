@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
-const fileManager = require('./utils/fileManager');
-const { errorResponse } = require('./utils/responseHelper');
+const fileManager = require('../utils/fileManager');
+const { errorResponse } = require('../utils/responseHelper');
 
 module.exports = {
   async findUser(email) {

@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const reportsController = require('./controllers/reportsController');
-const verifyRole = require('./middleware/verifyRole');
-const authMiddleware = require('./middleware/authMiddleware');
+const reportsController = require('../controllers/reportsController');
+const verifyRole = require('../middleware/verifyRole');
+const authMiddleware = require('../middleware/authMiddleware');
 
 router.get('/sales', authMiddleware, verifyRole(['admin','vendedor']), reportsController.getSalesReport);
 router.get('/month-sales', authMiddleware, verifyRole(['admin','vendedor']), reportsController.getMonthlySales);

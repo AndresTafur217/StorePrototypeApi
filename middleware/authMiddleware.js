@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
-const fileManager = require('./utils/fileManager');
-const { errorResponse } = require('./utils/responseHelper');
+const fileManager = require('../utils/fileManager');
+const { errorResponse } = require('../utils/responseHelper');
 
 const SECRET_KEY = process.env.SECRET_KEY; // pon esto en variables de entorno
 

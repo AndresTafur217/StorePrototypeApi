@@ -1,6 +1,6 @@
 const fileManager = require('../utils/fileManager');
 const { successResponse, errorResponse } = require('../utils/responseHelper');
-
+const notificationsController = require('./notificationsController');
 const stripeService = require('../services/payments/stripeService');
 const paypalService = require('../services/payments/paypalService');
 const pseService = require('../services/payments/pseService');

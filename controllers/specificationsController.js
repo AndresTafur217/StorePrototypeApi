@@ -1,7 +1,7 @@
-const fileManager = require('./utils/fileManager');
-const { generateId } = require('./utils/idGenerator');
-const { successResponse, errorResponse } = require('./utils/responseHelper');
-const auth = require('./middleware/authUser');
+const fileManager = require('../utils/fileManager');
+const { generateId } = require('../utils/idGenerator');
+const { successResponse, errorResponse } = require('../utils/responseHelper');
+const auth = require('../middleware/authUser');
 
 const specificationsController = {
   async addSpecification(req, res) {
@@ -68,7 +68,7 @@ const specificationsController = {
     }
   },
 
-  async getSpecificationsById(req, res) {
+  async getSpecificationById(req, res) {
     try {
       const { id } = req.params;
 
