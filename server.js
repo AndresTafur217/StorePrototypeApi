@@ -21,10 +21,16 @@ app.use((req, res, next) => {
 // Importar rutas
 const crudRoutes = require('./routes/crudRoutes');
 const userRoutes = require('./routes/userRoutes');
+const productRoutes= require('./routes/productRoutes');
+const specificationRoutes = require('./routes/specificationRoutes');
+const favoriteRoutes = require('./routes/favoriteRoutes');
 
 // Usar rutas
 app.use('/api', crudRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/product', productRoutes);
+app.use('/api/specification', specificationRoutes);
+app.use('/api/favorite', favoriteRoutes);
 
 // Ruta de salud del servidor
 app.get('/health', (req, res) => {

@@ -10,7 +10,7 @@ const SALT_ROUNDS = 10;
 
 const userController = {
   // Crear nuevo usuario
-  async createUser(req, res) {
+  async addUser(req, res) {
     try {
       // Asegurar que existe la tabla users
       await fileManager.ensureTable('users');
@@ -26,7 +26,7 @@ const userController = {
         ciudadDepartamento,
         pais,
         direccion,
-        contraseña
+        contraseña,
       } = req.body;
 
       // Validaciones
@@ -54,11 +54,11 @@ const userController = {
       const rolesPermitidos = ['cliente', 'admin', 'vendedor'];
       const estadosPermitidos = ['activo', 'inactivo', 'bloqueado'];
 
-      if (rol !== rolesPermitidos) {        
+      if (!rolesPermitidos.includes(rol)) {        
         return res.status(400).json(errorResponse('Rol no permitido'));
       }
 
-      if (estado !== estadosPermitidos) {
+      if (!estadosPermitidos.includes(estado)) {
         return res.status(400).json(errorResponse('Estado no permitido'));        
       }
 
@@ -77,6 +77,8 @@ const userController = {
         contraseña: hashedPassword,
         fechaIngreso: new Date().toISOString(),
         estado: estadosPermitidos.includes(req.body.estado) ? req.body.estado : 'activo',
+        valoracionPromedio: 0,
+        totalValoraciones: 0,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       };
@@ -90,14 +92,22 @@ const userController = {
       const userResponse = { ...newUser };
       delete userResponse.contraseña;
 
+      await notificationsController.createNotification({
+        body: {
+          usuarioId: newUser.id,
+          mensaje: '¡Bienvenido! Tu registro ha sido exitoso.',
+          tipo: 'success'
+        }
+      }, { status: () => ({ json: () => {} }) });
+
       res.status(201).json(
-        successResponse(userResponse, 'Usuario creado exitosamente')
+        successResponse(userResponse, 'Usuario agregado exitosamente')
       );
 
     } catch (error) {
-      console.error('Error creando usuario:', error);
+      console.error('Error agregando usuario:', error);
       res.status(500).json(
-        errorResponse('Error interno al crear usuario')
+        errorResponse('Error interno del servidor')
       );
     }
   },
@@ -136,7 +146,7 @@ const userController = {
       const status = err.status || 500;
       res.status(status).json(errorResponse(err.message));
 
-      console.error('Error en login:', error);
+      console.error('Error en login:', err);
       res.status(500).json(
         errorResponse('Error interno en login')
       );
@@ -284,6 +294,25 @@ const userController = {
         estado: newStatus,
         updatedAt: new Date().toISOString()
       };
+
+      if (newStatus == 'inactivo') {
+        await notificationsController.createNotification({
+          body: {
+            usuarioId: users[userIndex].id,
+            mensaje: 'Nos entristese que te vallas, esperamos que vuelvas pronto.',
+            tipo: 'success'
+          }
+        }, { status: () => ({ json: () => {} }) });        
+      }
+      if (newStatus == 'activo') {
+        await notificationsController.createNotification({
+          body: {
+            usuarioId: users[userIndex].id,
+            mensaje: '¡Bienvenido de vuelta! nos alegra que vuelvas y nos acompañes.',
+            tipo: 'success'
+          }
+        }, { status: () => ({ json: () => {} }) });
+      }
 
       await fileManager.writeTable('users', users);
 

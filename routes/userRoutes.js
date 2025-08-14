@@ -5,13 +5,13 @@ const verifyRole = require('./middleware/verifyRole');
 const authMiddleware = require('./middleware/authMiddleware');
 
 router.get('/', authMiddleware, verifyRole('admin'), usersController.getUsers);
-router.delete('/:id', authMiddleware, verifyRole('admin'), usersController.deleteUser);
-router.post('/signup', usersController.createUser);
+router.post('/signup', usersController.addUser);
 router.post('/login', usersController.login);
+router.get('/search/:term', usersController.searchUsers);
 router.get('/:id/profile', usersController.getUserProfile);
 router.post('/:id/change-password', usersController.changePassword);
-router.put('/:id/update-user', usersController.updateUser);
+router.put('/:id/update', usersController.updateUser);
 router.patch('/:id/toggle-status', usersController.toggleUserStatus);
-router.get('/search/:term', usersController.searchUsers);
+router.delete('/:id', authMiddleware, verifyRole(['admin']), usersController.deleteUser);
 
 module.exports = router;
