@@ -10,78 +10,74 @@ const notificationsController = require('./notificationsController');
 const SALT_ROUNDS = 10;
 
 const userController = {
-  // Crear nuevo usuario
+  // agregar nuevo usuario
   async addUser(req, res) {
     try {
       // Asegurar que existe la tabla users
       await fileManager.ensureTable('users');
       
-      // Recibir datos - CORREGIDO: agregar rol y estado
+      // Recibir datos
       const {
         tipoIdentificacion,
         nId,
         nombres,
         apellidos,
         email,
+        telefono,
+        celular,
         fechaNacimiento,
         ciudadDepartamento,
         pais,
         direccion,
         contraseña,
-        rol,        // ✅ Agregado
-        estado      // ✅ Agregado
+        rol,
+        estado
       } = req.body;
 
-      // Validaciones básicas
+      // Validaciones
       if (!nombres || !apellidos || !email || !contraseña) {
         return res.status(400).json(
           errorResponse('Nombres, apellidos, email y contraseña son obligatorios')
+        );
+      }
+      if (!telefono && !celular) {
+        return res.status(400).json(
+          errorResponse('Debe agregar al menos uno de los dos campos')
         );
       }
 
       // Verificar si el usuario ya existe
       const existingUsers = await fileManager.readTable('users');
       const userExists = existingUsers.some(user => 
-        user.email.toLowerCase() === email.toLowerCase()
+        user.email.toLowerCase() === email.toLowerCase() ||
+        user.nId.toLowerCase() === nId.toLowerCase()
       );
 
       if (userExists) {
         return res.status(409).json(
-          errorResponse('Ya existe un usuario con ese email')
+          errorResponse('Ya existe un usuario con ese email o con ese numero de identificación')
         );
-      }
-
-      // Validaciones de rol y estado - CORREGIDO
-      const rolesPermitidos = ['cliente', 'admin', 'vendedor'];
-      const estadosPermitidos = ['activo', 'inactivo', 'bloqueado'];
-
-      if (rol && !rolesPermitidos.includes(rol)) {        
-        return res.status(400).json(errorResponse('Rol no permitido'));
-      }
-
-      if (estado && !estadosPermitidos.includes(estado)) {
-        return res.status(400).json(errorResponse('Estado no permitido'));        
       }
 
       // Hashear contraseña
       const hashedPassword = await bcrypt.hash(contraseña, SALT_ROUNDS);
 
-      // Crear objeto usuario - CORREGIDO
+      // Crear objeto usuario
       const newUser = {
         id: generateId(),
         tipoIdentificacion: tipoIdentificacion || 'CC',
-        nId: nId || '',
+        nId: nId,
         nombres: nombres.trim(),
         apellidos: apellidos.trim(),
-        email: email.toLowerCase().trim(),  // ✅ Normalizar email
+        email: email.toLowerCase().trim(),
         fechaNacimiento: fechaNacimiento || '',
         ciudadDepartamento: ciudadDepartamento || '',
         pais: pais || 'Colombia',
-        rol: rol || 'cliente',              // ✅ Usar valor por defecto
+        rol: rol || 'cliente',
         direccion: direccion || '',
         contraseña: hashedPassword,
         fechaIngreso: new Date().toISOString(),
-        estado: estado || 'activo',         // ✅ Usar valor por defecto
+        estado: 'activo',
         valoracionPromedio: 0,
         totalValoraciones: 0,
         createdAt: new Date().toISOString(),
@@ -108,7 +104,6 @@ const userController = {
         }, { status: () => ({ json: () => {} }) });
       } catch (notifError) {
         console.error('Error creando notificación:', notifError);
-        // No fallar el registro si falla la notificación
       }
 
       res.status(201).json(
@@ -123,18 +118,20 @@ const userController = {
     }
   },
 
-  // Login de usuario - CORREGIDO
+  // Login de usuario
   async login(req, res) {
     try {
+      // Obtener datos de inicio de sesion
       const { email, contraseña } = req.body;
 
+      // Validaciones
       if (!email || !contraseña) {
         return res.status(400).json(
           errorResponse('Email y contraseña son obligatorios')
         );
       }
 
-      // Validaciones usando middleware authUser
+      // Autenticacion de usuario
       const user = await auth.findUser(email);
       await auth.verifyPassword(contraseña, user);
       await auth.verifyState(user);
@@ -165,6 +162,7 @@ const userController = {
   // Cambiar contraseña
   async changePassword(req, res) {
     try {
+      // Obtener datos de cambio de contraseña
       const { id } = req.params;
       const { contraseñaActual, contraseñaNueva } = req.body;
 
@@ -257,6 +255,7 @@ const userController = {
     try {
       const { id } = req.params;
       
+      // Verificar existencia de usuario
       const users = await fileManager.readTable('users');
       const user = users.find(u => u.id === id);
 
@@ -287,6 +286,7 @@ const userController = {
     try {
       const { id } = req.params;
       
+      // Verificar existencia de usuario
       const users = await fileManager.readTable('users');
       const userIndex = users.findIndex(u => u.id === id);
 
@@ -304,7 +304,7 @@ const userController = {
         updatedAt: new Date().toISOString()
       };
 
-      // Crear notificaciones (con manejo de errores)
+      // Crear notificaciones
       try {
         const mensaje = newStatus === 'inactivo' 
           ? 'Nos entristece que te vayas, esperamos que vuelvas pronto.'
@@ -321,6 +321,7 @@ const userController = {
         console.error('Error creando notificación:', notifError);
       }
 
+      // sobre escribir usuario
       await fileManager.writeTable('users', users);
 
       const userResponse = { ...users[userIndex] };
@@ -338,7 +339,7 @@ const userController = {
     }
   },
 
-  // Actualizar/editar usuario - CORREGIDO
+  // Actualizar/editar usuario
   async updateUser(req, res) {
     try {
       const { id } = req.params;
@@ -359,7 +360,7 @@ const userController = {
       const rolesPermitidos = ['cliente', 'admin', 'vendedor'];
       const estadosPermitidos = ['activo', 'inactivo', 'bloqueado'];
 
-      // CORREGIDO: Validaciones correctas
+      // Validaciones correctas
       if (userData.rol && !rolesPermitidos.includes(userData.rol)) {        
         return res.status(400).json(errorResponse('Rol no permitido'));
       }
@@ -376,6 +377,8 @@ const userController = {
         nombres: userData.nombres || user.nombres,
         apellidos: userData.apellidos || user.apellidos,
         email: userData.email || user.email,
+        telefono: userData.telefono || user.telefono,
+        celular: userData.celular || user.celular,
         fechaNacimiento: userData.fechaNacimiento || user.fechaNacimiento,
         ciudadDepartamento: userData.ciudadDepartamento || user.ciudadDepartamento,
         pais: userData.pais || user.pais,
