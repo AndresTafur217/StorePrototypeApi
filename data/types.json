@@ -1,1 +1,72 @@
-[]
+[
+  {
+    "id": "type_001_laptop_2024",
+    "nombre": "Laptop",
+    "descripcion": "Computadores portátiles para uso personal, profesional y gaming. Incluye ultrabooks, laptops convertibles, chromebooks y estaciones de trabajo móviles.",
+    "createdAt": "2024-01-10T09:00:00.000Z",
+    "updatedAt": "2024-01-10T09:00:00.000Z"
+  },
+  {
+    "id": "type_002_smartphone_2024",
+    "nombre": "Smartphone",
+    "descripcion": "Teléfonos inteligentes de última generación con tecnología 4G y 5G. Android e iOS, desde gama básica hasta flagship premium con cámaras avanzadas y procesadores potentes.",
+    "createdAt": "2024-01-10T09:15:00.000Z",
+    "updatedAt": "2024-06-20T14:30:00.000Z"
+  },
+  {
+    "id": "type_003_tablet_2024",
+    "nombre": "Tablet",
+    "descripcion": "Dispositivos táctiles portátiles para entretenimiento, productividad y educación. iPad, tablets Android y Windows, desde modelos básicos hasta Pro con stylus incluido.",
+    "createdAt": "2024-01-10T09:30:00.000Z",
+    "updatedAt": "2024-01-10T09:30:00.000Z"
+  },
+  {
+    "id": "type_004_desktop_2024",
+    "nombre": "PC de Escritorio",
+    "descripcion": "Computadores de escritorio para oficina, gaming y uso profesional. Torres completas, mini PCs, All-in-One y workstations con configuraciones personalizables.",
+    "createdAt": "2024-01-10T09:45:00.000Z",
+    "updatedAt": "2024-03-15T10:20:00.000Z"
+  },
+  {
+    "id": "type_005_console_2024",
+    "nombre": "Consola de Videojuegos",
+    "descripcion": "Consolas de gaming de nueva generación: PlayStation 5, Xbox Series X/S, Nintendo Switch OLED. Incluye ediciones especiales y bundles con juegos exclusivos.",
+    "createdAt": "2024-01-10T10:00:00.000Z",
+    "updatedAt": "2024-08-01T15:45:00.000Z"
+  },
+  {
+    "id": "type_006_monitor_2024",
+    "nombre": "Monitor",
+    "descripcion": "Pantallas para PC desde básicas hasta gaming y profesionales. Resoluciones 1080p, 1440p, 4K, tecnología IPS, OLED, curved, con tasas de refresco hasta 240Hz.",
+    "createdAt": "2024-01-10T10:15:00.000Z",
+    "updatedAt": "2024-05-10T12:30:00.000Z"
+  },
+  {
+    "id": "type_007_audio_2024",
+    "nombre": "Audio y Sonido",
+    "descripcion": "Dispositivos de audio: auriculares bluetooth, headsets gaming, altavoces inteligentes, soundbars, earbuds con cancelación de ruido y sistemas de sonido envolvente.",
+    "createdAt": "2024-01-10T10:30:00.000Z",
+    "updatedAt": "2024-07-25T16:15:00.000Z"
+  },
+  {
+    "id": "type_008_storage_2024",
+    "nombre": "Almacenamiento",
+    "descripcion": "Soluciones de almacenamiento: discos duros externos, SSD portátiles, memorias USB, tarjetas microSD, NAS y sistemas de respaldo en la nube con hardware dedicado.",
+    "createdAt": "2024-01-10T10:45:00.000Z",
+    "updatedAt": "2024-04-18T13:20:00.000Z"
+  },
+  {
+    "id": "type_009_network_2024",
+    "nombre": "Networking",
+    "descripcion": "Equipos de red y conectividad: routers WiFi 6, mesh systems, switches, access points, repetidores de señal y soluciones empresariales de networking.",
+    "createdAt": "2024-01-15T08:30:00.000Z",
+    "updatedAt": "2024-08-12T11:40:00.000Z"
+  },
+  {
+    "id": "type_010_wearable_2024",
+    "nombre": "Wearables",
+    "descripcion": "Tecnología vestible: smartwatches, fitness trackers, auriculares deportivos, anillos inteligentes y dispositivos de monitoreo de salud con sensores avanzados.",
+    "createdAt": "2024-01-20T09:15:00.000Z",
+    "updatedAt": "2024-08-08T14:55:00.000Z"
+  }
+]

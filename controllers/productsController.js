@@ -79,9 +79,9 @@ const productController = {
         descripcion,
         precio,
         stock = 0,
-        tipoIds = [],          // array de IDs de 'types'
-        areaIds = [],          // array de IDs de 'areas'
-        especificaciones = [], // array de IDs de 'specifications'
+        tipoIds = [],
+        areaIds = [],
+        especificaciones = [],
       } = req.body;
 
       if (!nombre || !descripcion || precio == null) {

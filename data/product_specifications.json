@@ -1,1 +1,22 @@
-[]
+[
+    { "productId": "prod_001_laptop_2024", "specificationId": "spec_001_processor_2024" },
+    { "productId": "prod_001_laptop_2024", "specificationId": "spec_002_ram_2024" },
+    { "productId": "prod_001_laptop_2024", "specificationId": "spec_003_storage_2024" },
+    { "productId": "prod_001_laptop_2024", "specificationId": "spec_004_display_2024" },
+    { "productId": "prod_002_phone_2024", "specificationId": "spec_001_processor_2024" },
+    { "productId": "prod_002_phone_2024", "specificationId": "spec_004_display_2024" },
+    { "productId": "prod_002_phone_2024", "specificationId": "spec_005_battery_2024" },
+    { "productId": "prod_002_phone_2024", "specificationId": "spec_006_camera_2024" },
+    { "productId": "prod_003_gaming_2024", "specificationId": "spec_001_processor_2024" },
+    { "productId": "prod_003_gaming_2024", "specificationId": "spec_009_graphics_2024" },
+    { "productId": "prod_003_gaming_2024", "specificationId": "spec_003_storage_2024" },
+    { "productId": "prod_003_gaming_2024", "specificationId": "spec_010_audio_2024" },
+    { "productId": "prod_004_tablet_2024", "specificationId": "spec_001_processor_2024" },
+    { "productId": "prod_004_tablet_2024", "specificationId": "spec_004_display_2024" },
+    { "productId": "prod_004_tablet_2024", "specificationId": "spec_005_battery_2024" },
+    { "productId": "prod_004_tablet_2024", "specificationId": "spec_006_camera_2024" },
+    { "productId": "prod_005_desktop_2024", "specificationId": "spec_001_processor_2024" },
+    { "productId": "prod_005_desktop_2024", "specificationId": "spec_002_ram_2024" },
+    { "productId": "prod_005_desktop_2024", "specificationId": "spec_009_graphics_2024" },
+    { "productId": "prod_005_desktop_2024", "specificationId": "spec_014_cooling_2024" }
+  ]

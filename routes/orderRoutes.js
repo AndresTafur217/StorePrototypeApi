@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const ordersController = require('../controllers/ordersController');
+const authMiddleware = require('../middleware/authMiddleware');
 
 const validateId = (req, res, next) => {
   const { id } = req.params;
@@ -10,11 +11,11 @@ const validateId = (req, res, next) => {
   next();
 };
 
-router.get('/orders', ordersController.getOrders);
-router.get('/filter-order', ordersController.filterOrders);
-router.post('/add-order', ordersController.addOrder);
-router.put('/:id/update-order', validateId, ordersController.updateOrderStatus);
-router.delete('/:id/cancel', validateId, ordersController.cancelOrder);
-router.delete('/:id/delete-order', validateId, ordersController.deleteOrder);
+router.get('/', authMiddleware, ordersController.getOrders);
+router.get('/filter-order', authMiddleware, ordersController.filterOrders);
+router.post('/add-order', authMiddleware, ordersController.addOrder);
+router.put('/:id/update-order', authMiddleware, validateId, ordersController.updateOrderStatus);
+router.delete('/:id/cancel', authMiddleware, validateId, ordersController.cancelOrder);
+router.delete('/:id/delete-order', authMiddleware, validateId, ordersController.deleteOrder);
 
 module.exports = router;

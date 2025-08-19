@@ -12,8 +12,8 @@ const validateId = (req, res, next) => {
   next();
 };
 
-router.get('/areas', areasController.getAreas);
-router.post('/add-are', authMiddleware, verifyRole(['admin']), areasController.addArea);
+router.get('/', areasController.getAreas);
+router.post('/add-area', authMiddleware, verifyRole(['admin']), areasController.addArea);
 router.get('/:id/area', validateId, areasController.getAreasById);
 router.put('/:id/update-area', validateId, authMiddleware, verifyRole(['admin']), areasController.updateArea);
 router.delete('/:id/delete-area', validateId, authMiddleware, verifyRole(['admin']), areasController.deleteArea);

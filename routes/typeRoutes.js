@@ -12,7 +12,7 @@ const validateId = (req, res, next) => {
   next();
 };
 
-router.get('/types', typesController.getTypes);
+router.get('/', typesController.getTypes);
 router.post('/add-type', authMiddleware, verifyRole(['admin']), typesController.addType);
 router.get('/:id/type', validateId, typesController.getTypeById);
 router.put('/:id/update-type', validateId, authMiddleware, verifyRole(['admin']), typesController.updateType);

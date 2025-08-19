@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const invoicesController = require('../controllers/invoicesController');
+const authMiddleware = require('../middleware/authMiddleware');
 
 const validateId = (req, res, next) => {
   const { id } = req.params;
@@ -10,9 +11,9 @@ const validateId = (req, res, next) => {
   next();
 };
 
-router.get('/invoices', invoicesController.getInvoices);
-router.get('/filter', invoicesController.filterInvoices);
-router.get('/invoice', invoicesController.createInvoice);
-router.get('/:id/pay', validateId, invoicesController.payInvoice);
+router.get('/', authMiddleware, invoicesController.getInvoices);
+router.get('/filter', authMiddleware, invoicesController.filterInvoices);
+router.get('/invoice', authMiddleware, invoicesController.createInvoice);
+router.get('/:id/pay', authMiddleware, validateId, invoicesController.payInvoice);
 
 module.exports = router;

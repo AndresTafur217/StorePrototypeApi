@@ -13,7 +13,7 @@ const validateId = (req, res, next) => {
 };
 
 // Obtener todas las especificaciones
-router.get('/specs', specificationsController.getSpecifications);
+router.get('/', specificationsController.getSpecifications);
 router.post( '/add-spec', authMiddleware, verifyRole(['admin', 'vendedor']), specificationsController.addSpecification);
 router.get('/:id/specification', validateId, specificationsController.getSpecificationById);
 router.put('/:id/update-pec', validateId, authMiddleware,verifyRole(['admin', 'vendedor']),specificationsController.updateSpecification);

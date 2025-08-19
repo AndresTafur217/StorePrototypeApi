@@ -1,1 +1,122 @@
-[]
+[
+  {
+    "id": "spec_001_processor_2024",
+    "nombre": "Procesador",
+    "descripcion": "Unidad central de procesamiento (CPU) que ejecuta las instrucciones del sistema. Determina la velocidad y eficiencia del dispositivo. Medido en GHz y número de núcleos.",
+    "imagen": "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400",
+    "createdAt": "2024-01-10T08:00:00.000Z",
+    "updatedAt": "2024-01-10T08:00:00.000Z"
+  },
+  {
+    "id": "spec_002_ram_2024",
+    "nombre": "Memoria RAM",
+    "descripcion": "Memoria de acceso aleatorio que almacena temporalmente los datos en uso. Mayor RAM permite mejor multitarea y rendimiento. Se mide en GB (4GB, 8GB, 16GB, 32GB).",
+    "imagen": "https://images.unsplash.com/photo-1562408590-e32931084e23?w=400",
+    "createdAt": "2024-01-10T08:15:00.000Z",
+    "updatedAt": "2024-06-15T11:20:00.000Z"
+  },
+  {
+    "id": "spec_003_storage_2024",
+    "nombre": "Almacenamiento",
+    "descripcion": "Capacidad de almacenamiento interno del dispositivo. Incluye SSD (más rápido) o HDD (más capacidad). Se mide en GB o TB (256GB, 512GB, 1TB, 2TB).",
+    "imagen": "https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=400",
+    "createdAt": "2024-01-10T08:30:00.000Z",
+    "updatedAt": "2024-01-10T08:30:00.000Z"
+  },
+  {
+    "id": "spec_004_display_2024",
+    "nombre": "Pantalla",
+    "descripcion": "Tamaño, resolución y tecnología de la pantalla. Incluye pulgadas, resolución (HD, Full HD, 4K), tipo de panel (IPS, OLED, LCD) y tasa de refresco.",
+    "imagen": "https://images.unsplash.com/photo-1593305841991-05c297ba4575?w=400",
+    "createdAt": "2024-01-10T08:45:00.000Z",
+    "updatedAt": "2024-07-20T14:30:00.000Z"
+  },
+  {
+    "id": "spec_005_battery_2024",
+    "nombre": "Batería",
+    "descripcion": "Capacidad y duración de la batería del dispositivo. Se mide en mAh para móviles o Wh para laptops. Incluye tecnología de carga rápida y tiempo de autonomía.",
+    "imagen": "https://images.unsplash.com/photo-1609592062458-d7aca5ad7c64?w=400",
+    "createdAt": "2024-01-10T09:00:00.000Z",
+    "updatedAt": "2024-05-10T16:45:00.000Z"
+  },
+  {
+    "id": "spec_006_camera_2024",
+    "nombre": "Cámara",
+    "descripcion": "Sistema de cámaras del dispositivo. Incluye megapíxeles, apertura, estabilización de imagen, zoom óptico, grabación de video y funciones de IA fotográfica.",
+    "imagen": "https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?w=400",
+    "createdAt": "2024-01-10T09:15:00.000Z",
+    "updatedAt": "2024-08-05T12:15:00.000Z"
+  },
+  {
+    "id": "spec_007_connectivity_2024",
+    "nombre": "Conectividad",
+    "descripcion": "Opciones de conexión disponibles: WiFi (6E, 6, 5), Bluetooth (5.3, 5.0), 5G/4G, USB-C, Thunderbolt, NFC y otras tecnologías de comunicación.",
+    "imagen": "https://images.unsplash.com/photo-1558618666-fbd51c2b9d67?w=400",
+    "createdAt": "2024-01-10T09:30:00.000Z",
+    "updatedAt": "2024-04-18T10:20:00.000Z"
+  },
+  {
+    "id": "spec_008_os_2024",
+    "nombre": "Sistema Operativo",
+    "descripcion": "Software base que controla el dispositivo. Android, iOS, Windows, macOS, Chrome OS. Incluye versión específica y actualizaciones de seguridad disponibles.",
+    "imagen": "https://images.unsplash.com/photo-1633419461186-7d40a38105ec?w=400",
+    "createdAt": "2024-01-10T09:45:00.000Z",
+    "updatedAt": "2024-08-12T15:30:00.000Z"
+  },
+  {
+    "id": "spec_009_graphics_2024",
+    "nombre": "Tarjeta Gráfica",
+    "descripcion": "Procesador gráfico (GPU) para renderizado visual y gaming. Integrada o dedicada. NVIDIA RTX, AMD Radeon, Intel Arc. Incluye memoria VRAM y soporte para ray tracing.",
+    "imagen": "https://images.unsplash.com/photo-1591238372338-486bf27e5efa?w=400",
+    "createdAt": "2024-01-10T10:00:00.000Z",
+    "updatedAt": "2024-07-08T13:45:00.000Z"
+  },
+  {
+    "id": "spec_010_audio_2024",
+    "nombre": "Audio",
+    "descripcion": "Sistema de audio del dispositivo. Altavoces estéreo, tecnología surround, cancelación de ruido, micrófono con supresión de eco, compatibilidad con Hi-Res audio.",
+    "imagen": "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400",
+    "createdAt": "2024-01-10T10:15:00.000Z",
+    "updatedAt": "2024-06-25T11:10:00.000Z"
+  },
+  {
+    "id": "spec_011_weight_2024",
+    "nombre": "Peso y Dimensiones",
+    "descripcion": "Medidas físicas del dispositivo: peso en gramos o kilogramos, dimensiones en mm (largo x ancho x grosor), factor de forma y ergonomía del diseño.",
+    "imagen": "https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=400",
+    "createdAt": "2024-01-15T08:30:00.000Z",
+    "updatedAt": "2024-01-15T08:30:00.000Z"
+  },
+  {
+    "id": "spec_012_security_2024",
+    "nombre": "Seguridad",
+    "descripcion": "Características de seguridad biométrica y digital. Huella dactilar, reconocimiento facial, encriptación, TPM, autenticación de dos factores y protección de datos.",
+    "imagen": "https://images.unsplash.com/photo-1516728778615-2d590ea188bf?w=400",
+    "createdAt": "2024-01-15T08:45:00.000Z",
+    "updatedAt": "2024-08-15T14:20:00.000Z"
+  },
+  {
+    "id": "spec_013_ports_2024",
+    "nombre": "Puertos y Conexiones",
+    "descripcion": "Puertos físicos disponibles: USB-A, USB-C, HDMI, audio jack 3.5mm, lectores de tarjetas SD, puertos Ethernet, conectores propietarios y expansión.",
+    "imagen": "https://images.unsplash.com/photo-1518291344630-4857135fb581?w=400",
+    "createdAt": "2024-01-15T09:00:00.000Z",
+    "updatedAt": "2024-03-20T16:15:00.000Z"
+  },
+  {
+    "id": "spec_014_cooling_2024",
+    "nombre": "Sistema de Refrigeración",
+    "descripcion": "Tecnología de enfriamiento del dispositivo. Ventiladores, disipadores de calor, cámaras de vapor, thermal throttling, gestión térmica inteligente y ruido acústico.",
+    "imagen": "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=400",
+    "createdAt": "2024-01-20T09:15:00.000Z",
+    "updatedAt": "2024-05-30T12:40:00.000Z"
+  },
+  {
+    "id": "spec_015_warranty_2024",
+    "nombre": "Garantía y Soporte",
+    "descripcion": "Cobertura de garantía del fabricante: duración (1-3 años), tipo de soporte incluido, servicio técnico, repuestos disponibles y extensiones de garantía opcionales.",
+    "imagen": "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=400",
+    "createdAt": "2024-01-20T09:30:00.000Z",
+    "updatedAt": "2024-08-10T17:25:00.000Z"
+  }
+]

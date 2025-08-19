@@ -12,7 +12,7 @@ const validateId = (req, res, next) => {
   next();
 };
 
-router.get('/products', productsController.getProducts);
+router.get('/', productsController.getProducts);
 router.get('/search/:term', productsController.searchProduct);
 router.post('/add-product', authMiddleware, verifyRole(['admin', 'vendedor']), productsController.addProduct);
 router.get('/:id/product', validateId, productsController.getProductById);
